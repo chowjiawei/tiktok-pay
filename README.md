@@ -1,5 +1,5 @@
-* [x] [抖音新交易系统 （泛知识 行业交易系统（旧版本 泛知识）](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/trade-system/trading/callback-config/config-callback-address)
-* [ ] [抖音新交易系统 （泛知识 行业交易系统（新版本）](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/trade-system/self-operated-trading/common-param)
+* [x] [抖音新交易系统 （行业交易系统（旧版本 泛知识）](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/trade-system/trading/callback-config/config-callback-address)
+* [ ] [抖音新交易系统 （行业交易系统（新版本）](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/trade-system/self-operated-trading/common-param)
 * [ ] [抖音新交易系统 （生活服务交易系统）](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/trade-system/agency-trade-system/common-param)
   
 如发现bug  请直接提issue或者直接提pr，造成的不便请谅解。
@@ -22,9 +22,10 @@
 
 - [安装说明](#composer)
 - [发布配置文件](#config)
-- [抖音新交易系统-泛知识](#tiktokPayA)
-- [抖音新交易系统-非泛知识](#tiktokPayB)
-
+- [行业交易系统（旧版本 泛知识）](#tiktokPayA)
+- [行业交易系统（新版本）](#tiktokPayB)
+- [生活服务交易系统](#tiktokPayC)
+- 
 <a name="composer"></a>
 # 安装说明
 
