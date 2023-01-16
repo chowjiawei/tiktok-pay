@@ -38,13 +38,18 @@
 `composer require chowjiawei/tiktok-pay`
 
 
-![威妥码拼音转汉语拼音](https://cdn.learnku.com/uploads/images/202108/12/61195/C9RmfgpHpN.png!large)
+<a name="config"></a>
+# 发布配置文件
+
+- 使用工具包请运行Artisan命令
+
+`php artisan vendor:publish --provider="Chowjiawei\TikTokPay\Providers\TikTokPayServiceProvider"`
 
 <a name="tiktokPay"></a>
 ## 抖音新交易系统
 ```use Chowjiawei\Helpers\Services\TTV2Service;```
 
-`helpers.php` 配置文件中 `tiktok` 选项 全部需要配置完全才可以使用
+`tiktok-pay.php` 配置文件中选项,需要配置完全才可以使用
 
 - 查询订单
 
