@@ -1,9 +1,9 @@
 {
-    "name": "chowjiawei/laravel-help-plugin",
+    "name": "chowjiawei/tiktok-pay",
     "type": "library",
-    "description": "Integrating useful auxiliary functions into laravel,Assistant tools based on laravel.",
-    "keywords": ["laravel", "plugin", "dingtalk", "wechat", "robot", "exchange"],
-    "homepage": "https://github.com/chowjiawei/laravel-help-plugin",
+    "description": "tiktok 抖音-新交易系统 -泛知识 、非泛知识 支付系统",
+    "keywords": ["laravel", "tiktok", "pay", "tiktok-pay"],
+    "homepage": "https://github.com/chowjiawei/tiktok-pay",
     "license": "MIT",
     "authors": [
         {
@@ -15,8 +15,6 @@
         "php": "^7.0|^8.0",
         "guzzlehttp/guzzle": "^6.3|^7.0",
         "laravel/framework": "^6.0|^7.0|^8.0|^9.0",
-        "overtrue/laravel-wechat":"^5.0|^6.0",
-        "torann/geoip": "^3.0.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.6"
@@ -37,9 +35,4 @@
             ]
         }
     },
-    "config": {
-        "allow-plugins": {
-            "easywechat-composer/easywechat-composer": true
-        }
-    }
 }
