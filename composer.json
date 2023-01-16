@@ -33,7 +33,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "TikTokPayServiceProvider"
+                "Chowjiawei\\TikTokPay\\Providers\\TikTokPayTikTokPayServiceProvider"
             ]
         }
     }
