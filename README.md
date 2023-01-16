@@ -53,7 +53,7 @@
 `tiktok-pay.php` 配置文件中选项,需要配置完全才可以使用
 
 ```php
-$tikTokPay=app('TikTokPay');
+$tikTokPay=app('TikTokPayIndustryTradingOld');
 
 返回数据均未做处理 详情查看抖音文档  数据让各位尽情发挥
 ```
