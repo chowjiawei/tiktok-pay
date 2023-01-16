@@ -47,7 +47,6 @@
 
 <a name="tiktokPay"></a>
 ## 抖音新交易系统 -泛知识
-```use Chowjiawei\Helpers\Services\TTV2Service;```
 
 `tiktok-pay.php` 配置文件中选项,需要配置完全才可以使用
 
