@@ -1,8 +1,8 @@
 <?php
 
-namespace Chowjiawei\Helpers\Providers;
+namespace Chowjiawei\TikTokPay\Providers;
 
-use Chowjiawei\Helpers\Facade\TikTokPay;
+use Chowjiawei\TikTokPay\Facade\TikTokPay;
 use Illuminate\Support\ServiceProvider;
 
 class TikTokPayServiceProvider extends ServiceProvider
@@ -17,7 +17,7 @@ class TikTokPayServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../Config/helpers.php' => config_path('tiktok-pay.php'),
+            __DIR__ . '/../Config/tiktok-pay.php' => config_path('tiktok-pay.php'),
         ]);
     }
 }

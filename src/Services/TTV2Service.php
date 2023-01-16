@@ -1,6 +1,6 @@
 <?php
 
-namespace Chowjiawei\Helpers\Services;
+namespace Chowjiawei\TikTokPay\Services;
 
 use Carbon\Carbon;
 use GuzzleHttp\Client;

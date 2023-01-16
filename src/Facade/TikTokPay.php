@@ -1,7 +1,10 @@
 <?php
 
-namespace Chowjiawei\Helpers\Facade;
+namespace Chowjiawei\TikTokPay\Facade;
 
+use Carbon\Carbon;
+use Chowjiawei\TikTokPay\Exception\TikTokPayException;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 
 class TikTokPay extends LaravelFacade
@@ -11,125 +14,60 @@ class TikTokPay extends LaravelFacade
         return 'TikTokPay';
     }
 
-    public static function allCountry()
+    public function getConfig()
     {
-        return config('helpers.country');
-    }
-    /**
-     * Get Country Name.
-     *
-     * @return  string
-     */
-    public static function getCountryName($countryCode): string
-    {
-        if (isset(self::allCountry()[$countryCode])) {
-            return self::allCountry()[$countryCode];
-        }
+        return config('tiktok-pay');
     }
 
-    /**
-     * Get Country Code.
-     *
-     * @return  string
-     */
-    public static function getCountryCode($countryName)
+    public function __construct()
     {
-        if (array_search($countryName, self::allCountry()) !== false) {
-            return array_search($countryName, self::allCountry());
-        }
-        return null;
-    }
-
-    /**
-     * Get All Exchange Code.
-     *
-     * @return  array
-     */
-    public static function getAllExchangeCode(): array
-    {
-        return config('helpers.exchangeCode');
-    }
-
-
-    public static function changeHWWord($text)
-    {
-        $words = config('helpers-pinyin')['hw'];
-        $chinesePinYins = array_keys($words);
-        $wPinYins = array_values($words);
-        $wWord = '';
-        $allIns = [];
-        foreach ($chinesePinYins as $chinesePinYin) {
-            if (stripos($text, $chinesePinYin) !== false) {
-                $allIns[] = $chinesePinYin;
-            }
-        }
-        if (!empty($allIns)) {
-            $longWord = self::getLongItem($allIns);
-            $wWord = $wWord . $words[$longWord];
-            $newText = substr($text, mb_strlen($longWord));
-            return $wWord;
-        }
-        return false;
-    }
-
-    public static function changeWHWord($text)
-    {
-        $words = config('helpers-pinyin')['wh'];
-        $chinesePinYins = array_keys($words);
-        $wPinYins = array_values($words);
-        $wWord = '';
-        $allIns = [];
-        foreach ($chinesePinYins as $chinesePinYin) {
-            if (stripos($text, $chinesePinYin) !== false) {
-                $allIns[] = $chinesePinYin;
-            }
-        }
-        if (!empty($allIns)) {
-            $longWord = self::getLongItem($allIns);
-            $wWord = $wWord . $words[$longWord];
-            $newText = substr($text, mb_strlen($longWord));
-            return $wWord;
-        }
-        return false;
-    }
-
-    public static function changeLongWHWord($text)
-    {
-        try {
-            $texts = explode(' ', $text);
-            $result = [];
-            foreach ($texts as $t) {
-                $result[] = self::changeWHWord($t);
-            }
-            return implode(' ', $result);
-        } catch (\Exception $exception) {
-            throw new \Exception('Pinyin is connected with spaces');
+        $config = $this->getConfig();
+        if (
+            !isset($config['tiktok']) || !isset($config['token']) || !isset($config['salt']) || !isset($config['app_id'])
+            || !isset($config['secret']) || !isset($config['notify_url']) || !isset($config['private_key_url']) || !isset($config['platform_public_key_url'])
+            || !isset($config['public_key_url']) || !isset($config['version']) || !isset($config['settle_notify_url']) || !isset($config['agree_refund_notify_url'])
+            || !isset($config['create_order_callback'])   || !isset($config['pay_callback'])
+        ) {
+            throw new TikTokPayException('必要配置缺失,请检查 tiktok-pay.php 文件后再试.');
         }
     }
 
-
-    public static function changeLongHWWord($text)
+    public function makeSign($method, $url, $body, $timestamp, $nonce_str)
     {
-        try {
-            $texts = explode(' ', $text);
-            $result = [];
-            foreach ($texts as $t) {
-                $result[] = self::changeHWWord($t);
-            }
-            return implode(' ', $result);
-        } catch (\Exception $exception) {
-            throw new \Exception('Pinyin is connected with spaces');
-        }
+        $config = $this->getConfig();
+        $text = $method . "\n" . $url . "\n" . $timestamp . "\n" . $nonce_str . "\n" . $body . "\n";
+        $priKey = file_get_contents($config['private_key_url']);
+        $privateKey = openssl_get_privatekey($priKey, '');
+        openssl_sign($text, $sign, $privateKey, OPENSSL_ALGO_SHA256);
+        return base64_encode($sign);
     }
 
-    public static function getLongItem($array)
+    //查询订单
+    public function query(string $trackNumber)
     {
-        $index = 0;
-        foreach ($array as $k => $v) {
-            if (strlen($array[$index]) < strlen($v)) {
-                $index = $k;
-            }
+        $config = $this->getConfig();
+
+        $order = ['out_order_no' => $trackNumber];
+
+        $timestamp = Carbon::now()->timestamp;
+        $str = substr(md5($timestamp), 5, 15);
+        $body = json_encode($order);
+        $sign = $this->makeSign('POST', '/api/apps/trade/v2/query_order', $body, $timestamp, $str);
+        $client = new Client();
+        $url = 'https://developer.toutiao.com/api/apps/trade/v2/query_order';
+        $response = $client->post($url, [
+            'json' => $order ,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Byte-Authorization' => 'SHA256-RSA2048 appid="' . $config['app_id'] . '",nonce_str=' . $str . ',timestamp="' . $timestamp . '",key_version="' . $config["version"] . '",signature="' . $sign . '"'
+            ]]);
+        $data = json_decode($response->getBody()->getContents(), true);
+        if ($data['err_no'] == 0) {
+            return $data['data'];
         }
-        return $array[$index];
+        return [];
     }
 }
+//if (!function_exists('a')) {
+//}

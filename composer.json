@@ -14,14 +14,16 @@
     "require": {
         "php": "^7.0|^8.0",
         "guzzlehttp/guzzle": "^6.3|^7.0",
-        "laravel/framework": "^6.0|^7.0|^8.0|^9.0"
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0",
+        "ext-json": "*",
+        "ext-openssl": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
         "psr-4": {
-            "Chowjiawei\\Helpers\\": "src/"
+            "Chowjiawei\\TikTokPay\\": "src/"
         }
     },
     "scripts": {
@@ -33,6 +35,11 @@
             "providers": [
                 "TikTokPayServiceProvider"
             ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": false
         }
     }
 }
