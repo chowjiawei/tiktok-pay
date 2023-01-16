@@ -27,7 +27,7 @@
         }
     },
     "scripts": {
-        "lint": "phpcs --standard=PSR1,PSR12,./ruleset.xml  app/ routes/ config/",
+        "lint": "phpcs --standard=PSR1,PSR12,./ruleset.xml  src/ ",
         "lint-fix": "phpcbf --standard=PSR1,PSR12   src/"
     },
     "extra": {
