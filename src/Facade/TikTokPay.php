@@ -113,7 +113,7 @@ class TikTokPay extends LaravelFacade
 
 
     //发起退款(单个订单多个订单项)  发起后还需要审核 同意退款
-    public function refundManyItem($trackNumber, $item)
+    public function refundByItems($trackNumber, $item)
     {
 //        $item= [
 //            [
@@ -334,7 +334,7 @@ class TikTokPay extends LaravelFacade
     }
 
     //预下单回调
-    public function returnCallback(Request $request)
+    public function returnPreCallback(Request $request)
     {
         $status = $this->verify(str_replace("\\/", "/", json_encode($request->post(), JSON_UNESCAPED_UNICODE)), $request->header()['byte-timestamp'][0], $request->header()['byte-nonce-str'][0], $request->header()['byte-signature'][0]);
         if ($status) {
