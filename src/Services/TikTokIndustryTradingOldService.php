@@ -6,8 +6,9 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-class TikTokService
+class TikTokIndustryTradingOldService
 {
+    //行业交易系统-旧
     public $queryOrderUrl =  "/api/apps/trade/v2/query_order"; //查询订单接口
     public $queryOrderMethod =  "POST"; //查询订单接口查询方式
     public $queryOrderFullUrl = 'https://developer.toutiao.com/api/apps/trade/v2/query_order'; //查询订单完整接口
@@ -37,9 +38,9 @@ class TikTokService
     public $createSettleFullUrl = 'https://developer.toutiao.com/api/apps/trade/v2/create_settle'; //发起分账完整接口
 
 
+
     public function __construct()
     {
-        $tikTokPay = app('TikTokPay');
-        $this->config = $tikTokPay->getConfig();
+        $this->config = config('tiktok-pay')['industry-trading-old'];
     }
 }

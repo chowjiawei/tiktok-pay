@@ -4,16 +4,16 @@ namespace Chowjiawei\TikTokPay\Facade;
 
 use Carbon\Carbon;
 use Chowjiawei\TikTokPay\Exception\TikTokPayException;
-use Chowjiawei\TikTokPay\Services\TikTokService;
+use Chowjiawei\TikTokPay\Services\TikTokIndustryTradingOldService;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 
-class TikTokPay extends LaravelFacade
+class TikTokPayIndustryTradingOld extends LaravelFacade
 {
     protected static function getFacadeAccessor()
     {
-        return 'TikTokPay';
+        return 'TikTokPayIndustryTradingOld';
     }
 
     public function getConfig()
@@ -25,10 +25,10 @@ class TikTokPay extends LaravelFacade
     {
         $config = $this->getConfig();
         if (
-            !isset($config['tiktok']) || !isset($config['tiktok']['token']) || !isset($config['tiktok']['salt']) || !isset($config['tiktok']['app_id'])
-            || !isset($config['tiktok']['secret']) || !isset($config['tiktok']['notify_url']) || !isset($config['tiktok']['private_key_url']) || !isset($config['tiktok']['platform_public_key_url'])
-            || !isset($config['tiktok']['public_key_url']) || !isset($config['tiktok']['version']) || !isset($config['tiktok']['settle_notify_url']) || !isset($config['tiktok']['agree_refund_notify_url'])
-            || !isset($config['tiktok']['create_order_callback'])   || !isset($config['tiktok']['pay_callback'])
+            !isset($config['industry-trading-old']) || !isset($config['industry-trading-old']['token']) || !isset($config['industry-trading-old']['salt']) || !isset($config['industry-trading-old']['app_id'])
+            || !isset($config['industry-trading-old']['secret']) || !isset($config['industry-trading-old']['notify_url']) || !isset($config['industry-trading-old']['private_key_url']) || !isset($config['industry-trading-old']['platform_public_key_url'])
+            || !isset($config['industry-trading-old']['public_key_url']) || !isset($config['industry-trading-old']['version']) || !isset($config['industry-trading-old']['settle_notify_url']) || !isset($config['industry-trading-old']['agree_refund_notify_url'])
+            || !isset($config['industry-trading-old']['create_order_callback'])   || !isset($config['industry-trading-old']['pay_callback'])
         ) {
             throw new TikTokPayException('必要配置缺失,请检查 tiktok-pay.php 文件后再试.');
         }
@@ -36,7 +36,7 @@ class TikTokPay extends LaravelFacade
 
     public function makeSign($method, $url, $body, $timestamp, $nonceStr)
     {
-        $config = $this->getConfig()['tiktok'];
+        $config = $this->getConfig()['industry-trading-old'];
         $text = $method . "\n" . $url . "\n" . $timestamp . "\n" . $nonceStr . "\n" . $body . "\n";
         $priKey = file_get_contents($config['private_key_url']);
         $privateKey = openssl_get_privatekey($priKey, '');
@@ -47,9 +47,9 @@ class TikTokPay extends LaravelFacade
     //查询订单
     public function query(string $trackNumber)
     {
-        $tikTokService = new TikTokService();
+        $tikTokService = new TikTokIndustryTradingOldService();
 
-        $config = $this->getConfig()['tiktok'];
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_order_no' => $trackNumber
@@ -74,8 +74,8 @@ class TikTokPay extends LaravelFacade
     //发起退款(单个订单单个订单项)  发起后还需要审核 同意退款后才真正退款
     public function refund($trackNumber, $price, $itemOrderId)
     {
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_order_no' => $trackNumber,
@@ -125,8 +125,8 @@ class TikTokPay extends LaravelFacade
 //                "refund_amount" => (int)$price
 //            ],
 //        ];
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_order_no' => $trackNumber,
@@ -160,8 +160,8 @@ class TikTokPay extends LaravelFacade
     //同意退款   钱在这里就会直接退回去
     public function agreeRefund($trackNumber)
     {
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_refund_no' => $trackNumber,
@@ -188,8 +188,8 @@ class TikTokPay extends LaravelFacade
     //查询退款
     public function queryRefund($trackNumber)
     {
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_refund_no' => $trackNumber,
@@ -216,8 +216,8 @@ class TikTokPay extends LaravelFacade
     //设置回调信息  调用一次即可
     public function setCallBackConfig(array $settingData = [])
     {
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
         if (empty($settingData)) {
             $settingData = [
                 'create_order_callback' => $config['create_order_callback'],
@@ -244,8 +244,8 @@ class TikTokPay extends LaravelFacade
     //查询当前回调设置
     public function getSettingReturn()
     {
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
         $order = [];
         $timestamp = Carbon::now()->timestamp;
         $str = substr(md5($timestamp), 5, 15);
@@ -268,8 +268,8 @@ class TikTokPay extends LaravelFacade
     public function createSettle($trackNumber, $desc)
     {
 //        $trackNumber  分账的时候 财务写  这是分账的自定义id   $desc 分账描述
-        $tikTokService = new TikTokService();
-        $config = $this->getConfig()['tiktok'];
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
 
         $order = [
             'out_order_no' => $trackNumber,
@@ -365,7 +365,7 @@ class TikTokPay extends LaravelFacade
 
     public function verify($http_body, $timestamp, $nonce_str, $sign)
     {
-        $config = $this->getConfig()['tiktok'];
+        $config = $this->getConfig()['industry-trading-old'];
         $data = $timestamp . "\n" . $nonce_str . "\n" . $http_body . "\n";
         $publicKey = file_get_contents($config['platform_public_key_url']);
         if (!$publicKey) {
