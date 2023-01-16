@@ -51,11 +51,15 @@
 
 `tiktok-pay.php` 配置文件中选项,需要配置完全才可以使用
 
+```php
+$tikTokPay=app('TikTokPay');
+```
 - 查询订单
 
 ```php
-$tiktokService= new TTV2Service();
-$tiktokService->query("站内订单号，非抖音侧订单号");
+
+$tikTokPay->query('站内订单号，非抖音侧订单号');
+
 正确时返回数组 其余返回空数组
 ```
 
