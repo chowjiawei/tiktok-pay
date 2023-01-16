@@ -1,0 +1,45 @@
+{
+    "name": "chowjiawei/laravel-help-plugin",
+    "type": "library",
+    "description": "Integrating useful auxiliary functions into laravel,Assistant tools based on laravel.",
+    "keywords": ["laravel", "plugin", "dingtalk", "wechat", "robot", "exchange"],
+    "homepage": "https://github.com/chowjiawei/laravel-help-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "chowjiawei",
+            "email": "1084186870@qq.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0|^8.0",
+        "guzzlehttp/guzzle": "^6.3|^7.0",
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0",
+        "overtrue/laravel-wechat":"^5.0|^6.0",
+        "torann/geoip": "^3.0.2"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chowjiawei\\Helpers\\": "src/"
+        }
+    },
+    "scripts": {
+        "lint": "phpcs --standard=PSR1,PSR12,./ruleset.xml  app/ routes/ config/",
+        "lint-fix": "phpcbf --standard=PSR1,PSR12   src/"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TikTokPayServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "easywechat-composer/easywechat-composer": true
+        }
+    }
+}
