@@ -19,18 +19,18 @@ class TikTokPay extends LaravelFacade
         return config('tiktok-pay');
     }
 
-    public function __construct()
-    {
-        $config = $this->getConfig();
-        if (
-            !isset($config['tiktok']) || !isset($config['token']) || !isset($config['salt']) || !isset($config['app_id'])
-            || !isset($config['secret']) || !isset($config['notify_url']) || !isset($config['private_key_url']) || !isset($config['platform_public_key_url'])
-            || !isset($config['public_key_url']) || !isset($config['version']) || !isset($config['settle_notify_url']) || !isset($config['agree_refund_notify_url'])
-            || !isset($config['create_order_callback'])   || !isset($config['pay_callback'])
-        ) {
-            throw new TikTokPayException('必要配置缺失,请检查 tiktok-pay.php 文件后再试.');
-        }
-    }
+//    public function __construct()
+//    {
+//        $config = $this->getConfig();
+//        if (
+//            !isset($config['tiktok']) || !isset($config['token']) || !isset($config['salt']) || !isset($config['app_id'])
+//            || !isset($config['secret']) || !isset($config['notify_url']) || !isset($config['private_key_url']) || !isset($config['platform_public_key_url'])
+//            || !isset($config['public_key_url']) || !isset($config['version']) || !isset($config['settle_notify_url']) || !isset($config['agree_refund_notify_url'])
+//            || !isset($config['create_order_callback'])   || !isset($config['pay_callback'])
+//        ) {
+//            throw new TikTokPayException('必要配置缺失,请检查 tiktok-pay.php 文件后再试.');
+//        }
+//    }
 
     public function makeSign($method, $url, $body, $timestamp, $nonce_str)
     {
