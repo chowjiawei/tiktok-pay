@@ -104,6 +104,13 @@ $tikTokPay->queryRefund('站内订单号，非抖音侧订单号');
 $tikTokPay->createSettle("站内订单号，非抖音侧订单号", "分账描述 可为空");
 ```
 
+- 查询分账
+
+```php
+$tikTokPay->querySettle("站内订单号，非抖音侧订单号", "分账描述 可为空");
+```
+
+
 - 设置回调配置
 
 #### `config`中配置完成后 `$settingData`可以不传

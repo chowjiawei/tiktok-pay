@@ -37,7 +37,9 @@ class TikTokIndustryTradingOldService
     public $createSettleMethod = 'POST'; //发起分账接口查询方式
     public $createSettleFullUrl = 'https://developer.toutiao.com/api/apps/trade/v2/create_settle'; //发起分账完整接口
 
-
+    public $querySettleUrl = '/api/apps/trade/v2/query_settle'; //查询分账接口
+    public $querySettleMethod = 'POST'; //查询分账接口查询方式
+    public $querySettleFullUrl = 'https://developer.toutiao.com/api/apps/trade/v2/query_settle'; //查询分账完整接口
 
     public function __construct()
     {

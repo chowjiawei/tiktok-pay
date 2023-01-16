@@ -208,10 +208,35 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
                 'Accept' => 'application/json',
                 'Byte-Authorization' => 'SHA256-RSA2048 appid="' . $config['app_id'] . '",nonce_str=' . $str . ',timestamp="' . $timestamp . '",key_version="' . $config["version"] . '",signature="' . $sign . '"'
             ]]);
-        $data = json_decode($response->getBody()->getContents(), true);
-        return $data;
+        return json_decode($response->getBody()->getContents(), true);
     }
 
+
+    //查询分账
+    public function querySettle($trackNumber)
+    {
+        $tikTokService = new TikTokIndustryTradingOldService();
+        $config = $this->getConfig()['industry-trading-old'];
+
+        $order = [
+            'out_settle_no' => $trackNumber,
+        ];
+        $timestamp = Carbon::now()->timestamp;
+        $str = substr(md5($timestamp), 5, 15);
+        $body = json_encode($order);
+
+        $sign = $this->makeSign($tikTokService->querySettleMethod, $tikTokService->querySettleUrl, $body, $timestamp, $str);
+        $client = new Client();
+        $url = $tikTokService->querySettleFullUrl;
+        $response = $client->post($url, [
+            'json' => $order ,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Byte-Authorization' => 'SHA256-RSA2048 appid="' . $config['app_id'] . '",nonce_str=' . $str . ',timestamp="' . $timestamp . '",key_version="' . $config["version"] . '",signature="' . $sign . '"'
+            ]]);
+        return json_decode($response->getBody()->getContents(), true);
+    }
 
     //设置回调信息  调用一次即可
     public function setCallBackConfig(array $settingData = [])
