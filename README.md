@@ -163,7 +163,7 @@ $tikTokPay->returnPreCallback($request);  //控制器内 直接将接受的Reque
 
 如果业务处理失败 需要手动返回抖音成功
 ```php
-$tikTokPay->returnOK(); 
+$tikTokPay->returnSuccess(); 
 ```
 如果业务处理失败 需要手动返回抖音失败
 ```php
@@ -184,7 +184,7 @@ $tikTokPay->refundReturn($request);
 
 如果业务处理失败 需要手动返回抖音成功
 ```php
-$tikTokPay->returnOK(); 
+$tikTokPay->returnSuccess(); 
 ```
 如果业务处理失败 需要手动返回抖音失败
 ```php
@@ -200,7 +200,7 @@ $tikTokPay->settleCallback($request);
 
 如果业务处理失败 需要手动返回抖音成功
 ```php
-$tikTokPay->returnOK(); 
+$tikTokPay->returnSuccess(); 
 ```
 如果业务处理失败 需要手动返回抖音失败
 ```php
