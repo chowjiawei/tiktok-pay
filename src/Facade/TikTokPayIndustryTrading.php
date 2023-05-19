@@ -20,5 +20,4 @@ class TikTokPayIndustryTrading extends LaravelFacade
     {
         return config('tiktok-pay');
     }
-
 }

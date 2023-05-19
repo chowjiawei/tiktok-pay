@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Chowjiawei\TikTokPay\Exception\TikTokPayException;
 use Chowjiawei\TikTokPay\Services\TikTokIndustryTradingOldService;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 
@@ -34,7 +35,7 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
         }
     }
 
-    public function makeSign($method, $url, $body, $timestamp, $nonceStr)
+    public function makeSign($method, $url, $body, $timestamp, $nonceStr): string
     {
         $config = $this->getConfig()['industry-trading-old'];
         $text = $method . "\n" . $url . "\n" . $timestamp . "\n" . $nonceStr . "\n" . $body . "\n";
@@ -72,6 +73,14 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //发起退款(单个订单单个订单项)  发起后还需要审核 同意退款后才真正退款
+
+    /**
+     * @param $trackNumber
+     * @param $price
+     * @param $itemOrderId
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function refund($trackNumber, $price, $itemOrderId)
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -113,6 +122,13 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //发起退款(单个订单多个订单项)  发起后还需要审核 同意退款
+
+    /**
+     * @param $trackNumber
+     * @param $item
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function refundByItems($trackNumber, $item)
     {
 //        $item= [
@@ -158,6 +174,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //同意退款   钱在这里就会直接退回去
+
+    /**
+     * @param $trackNumber
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function agreeRefund($trackNumber)
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -186,6 +208,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //查询退款
+
+    /**
+     * @param $trackNumber
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function queryRefund($trackNumber)
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -213,6 +241,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //查询分账
+
+    /**
+     * @param $trackNumber
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function querySettle($trackNumber)
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -239,6 +273,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //设置回调信息  调用一次即可
+
+    /**
+     * @param array $settingData
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function setCallBackConfig(array $settingData = [])
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -267,6 +307,11 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //查询当前回调设置
+
+    /**
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function getSettingReturn()
     {
         $tikTokService = new TikTokIndustryTradingOldService();
@@ -290,6 +335,13 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //发起分账
+
+    /**
+     * @param $trackNumber
+     * @param $desc
+     * @return mixed
+     * @throws GuzzleException
+     */
     public function createSettle($trackNumber, $desc)
     {
 //        $trackNumber  分账的时候 财务写  这是分账的自定义id   $desc 分账描述
@@ -323,7 +375,7 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
 
 
     //支付回调
-    public function return(Request $request)
+    public function return(Request $request): array
     {
         $status = $this->verify(json_encode($request->post()), $request->header()['byte-timestamp'][0], $request->header()['byte-nonce-str'][0], $request->header()['byte-signature'][0]);
         //搬运原来旧的逻辑
@@ -339,7 +391,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //接收退款回调
-    public function refundReturn(Request $request)
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function refundReturn(Request $request): bool
     {
         $status = $this->verify(str_replace("\\/", "/", json_encode($request->post(), JSON_UNESCAPED_UNICODE)), $request->header()['byte-timestamp'][0], $request->header()['byte-nonce-str'][0], $request->header()['byte-signature'][0]);
         if ($status) {
@@ -349,7 +406,12 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //接收分账回调
-    public function settleCallback(Request $request)
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function settleCallback(Request $request): bool
     {
         $status = $this->verify(str_replace("\\/", "/", json_encode($request->post(), JSON_UNESCAPED_UNICODE)), $request->header()['byte-timestamp'][0], $request->header()['byte-nonce-str'][0], $request->header()['byte-signature'][0]);
         if ($status) {
@@ -359,6 +421,10 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
     }
 
     //预下单回调
+    /**
+     * @param Request $request
+     * @return array|string
+     */
     public function returnPreCallback(Request $request)
     {
         $status = $this->verify(str_replace("\\/", "/", json_encode($request->post(), JSON_UNESCAPED_UNICODE)), $request->header()['byte-timestamp'][0], $request->header()['byte-nonce-str'][0], $request->header()['byte-signature'][0]);
@@ -372,7 +438,10 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
         return $data ?? [];
     }
 
-    public function returnSuccess()
+    /**
+     * @return array
+     */
+    public function returnSuccess(): array
     {
         return [
             "err_no" => 0,
@@ -380,7 +449,11 @@ class TikTokPayIndustryTradingOld extends LaravelFacade
         ];
     }
 
-    public function returnError(string $result = '')
+    /**
+     * @param string $result
+     * @return array
+     */
+    public function returnError(string $result = ''): array
     {
         return [
             "err_no" => 400,

@@ -20,5 +20,4 @@ class TikTokPayLifeService extends LaravelFacade
     {
         return config('tiktok-pay');
     }
-
 }
