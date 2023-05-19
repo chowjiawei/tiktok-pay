@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Facade as LaravelFacade;
 
 class TikTokPayIndustryTradingOld extends LaravelFacade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'TikTokPayIndustryTradingOld';
     }
